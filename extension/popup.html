@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=400">
+  <title>Live Call Brief</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1 class="title">Live Call Brief</h1>
+        <span id="connectionStatus" class="status-badge status-checking">Checking...</span>
+      </div>
+      <div class="header-right">
+        <button id="refreshBtn" class="icon-btn" title="Force Refresh" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+            <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Search Form -->
+    <form id="searchForm" class="search-form">
+      <div class="search-row">
+        <div class="input-group input-group-large">
+          <label for="propertyName">Property Name *</label>
+          <input type="text" id="propertyName" name="propertyName" placeholder="e.g., Marriott Downtown" required autofocus>
+        </div>
+      </div>
+      <div class="search-row search-row-split">
+        <div class="input-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="e.g., San Francisco">
+        </div>
+        <div class="input-group">
+          <label for="state">State</label>
+          <input type="text" id="state" name="state" placeholder="e.g., CA" maxlength="2">
+        </div>
+      </div>
+      <button type="submit" id="searchBtn" class="btn btn-primary">
+        <span class="btn-text">Search</span>
+        <span class="btn-loading hidden">
+          <span class="spinner"></span>
+          Searching...
+        </span>
+      </button>
+    </form>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-state hidden">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Fetching brief...</p>
+      <p class="loading-subtext">This may take a few seconds</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="error-state hidden">
+      <div class="error-icon">!</div>
+      <p class="error-title">Unable to Load Brief</p>
+      <p class="error-message" id="errorMessage"></p>
+      <button type="button" class="btn btn-secondary" id="retryBtn">Retry</button>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsContainer" class="results-container hidden">
+      <!-- Data Quality Indicator -->
+      <div class="quality-indicator" id="qualityIndicator">
+        <div class="quality-header">
+          <span class="quality-label">Data Completeness</span>
+          <span class="quality-score" id="qualityScore">--</span>
+        </div>
+        <div class="quality-bar">
+          <div class="quality-fill" id="qualityFill"></div>
+        </div>
+        <div class="quality-badges" id="qualityBadges"></div>
+      </div>
+
+      <!-- Brief Metadata -->
+      <div class="brief-meta" id="briefMeta">
+        <span class="meta-item" id="metaProperty"></span>
+        <span class="meta-item" id="metaGenerated"></span>
+        <span class="meta-item" id="metaCache"></span>
+      </div>
+
+      <!-- Collapsible Sections -->
+      <div class="sections" id="sections">
+        <!-- Property Scope Section -->
+        <section class="section" id="propertyScopeSection">
+          <button class="section-header" data-section="propertyScope">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146z"/>
+              </svg>
+            </span>
+            <span class="section-title">Property Scope</span>
+            <span class="section-status" id="propertyScopeStatus"></span>
+            <span class="section-chevron">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </button>
+          <div class="section-content" id="propertyScopeContent"></div>
+        </section>
+
+        <!-- Local Competitors Section -->
+        <section class="section" id="competitorsSection">
+          <button class="section-header" data-section="competitors">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+                <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+              </svg>
+            </span>
+            <span class="section-title">Local Competitors</span>
+            <span class="section-status" id="competitorsStatus"></span>
+            <span class="section-chevron">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </button>
+          <div class="section-content" id="competitorsContent"></div>
+        </section>
+
+        <!-- Adjacency Customers Section -->
+        <section class="section" id="adjacencySection">
+          <button class="section-header" data-section="adjacency">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0z"/>
+              </svg>
+            </span>
+            <span class="section-title">Adjacency Customers</span>
+            <span class="section-status" id="adjacencyStatus"></span>
+            <span class="section-chevron">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </button>
+          <div class="section-content" id="adjacencyContent"></div>
+        </section>
+
+        <!-- Parent Notes Section -->
+        <section class="section" id="parentNotesSection">
+          <button class="section-header" data-section="parentNotes">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+              </svg>
+            </span>
+            <span class="section-title">Parent Selling Notes</span>
+            <span class="section-status" id="parentNotesStatus"></span>
+            <span class="section-chevron">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </button>
+          <div class="section-content" id="parentNotesContent"></div>
+        </section>
+
+        <!-- LinkedIn Links Section -->
+        <section class="section" id="linkedinSection">
+          <button class="section-header" data-section="linkedin">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+              </svg>
+            </span>
+            <span class="section-title">LinkedIn Search Links</span>
+            <span class="section-status" id="linkedinStatus"></span>
+            <span class="section-chevron">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </button>
+          <div class="section-content" id="linkedinContent"></div>
+        </section>
+
+        <!-- Recent Articles Section -->
+        <section class="section" id="articlesSection">
+          <button class="section-header" data-section="articles">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12z"/>
+                <path d="M2 3h10v2H2V3zm0 3h4v3H2V6zm0 4h4v1H2v-1zm0 2h4v1H2v-1zm5-6h2v1H7V6zm3 0h2v1h-2V6zM7 8h2v1H7V8zm3 0h2v1h-2V8zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1z"/>
+              </svg>
+            </span>
+            <span class="section-title">Recent Articles</span>
+            <span class="section-status" id="articlesStatus"></span>
+            <span class="section-chevron">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </button>
+          <div class="section-content" id="articlesContent"></div>
+        </section>
+      </div>
+
+      <!-- Performance Info -->
+      <div class="performance-info" id="performanceInfo">
+        <span id="perfGenTime"></span>
+        <span id="perfFetchTime"></span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span class="version">v1.0.0</span>
+      <a href="#" id="settingsLink" class="settings-link">Settings</a>
+    </footer>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast" class="toast hidden">
+    <span class="toast-message" id="toastMessage"></span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

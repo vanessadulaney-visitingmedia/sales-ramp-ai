@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Live Call Brief",
+  "version": "1.0.0",
+  "description": "Instant property briefs for sales calls - property scope, competitors, adjacency customers, and LinkedIn contacts",
+  "permissions": [
+    "storage",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Live Call Brief"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.outreach.io/*"],
+      "js": ["content.js"],
+      "css": ["content-styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

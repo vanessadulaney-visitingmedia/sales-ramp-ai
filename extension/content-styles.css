@@ -1,0 +1,286 @@
+/* =============================================================================
+   LIVE CALL BRIEF - CONTENT SCRIPT STYLES
+   Injected panel styles for Outreach integration
+   ============================================================================= */
+
+/* Toggle Button - Fixed position */
+.lcb-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999998;
+  transition: all 0.2s ease;
+}
+
+.lcb-toggle-btn:hover {
+  background: #1d4ed8;
+  transform: scale(1.05);
+}
+
+.lcb-toggle-btn.lcb-toggle-active {
+  background: #1e40af;
+}
+
+/* Panel - Slide-in from right */
+.lcb-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 360px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  color: #1f2937;
+  transition: transform 0.3s ease;
+}
+
+.lcb-panel-hidden {
+  transform: translateX(100%);
+}
+
+/* Panel Header */
+.lcb-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #2563eb;
+  color: white;
+}
+
+.lcb-panel-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.lcb-panel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.lcb-panel-actions button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.lcb-panel-actions button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Search Bar */
+.lcb-panel-search {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lcb-search-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.lcb-search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.lcb-btn-search {
+  padding: 8px 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.lcb-btn-search:hover {
+  background: #1d4ed8;
+}
+
+/* Panel Content */
+.lcb-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* Empty State */
+.lcb-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+/* Loading State */
+.lcb-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+.lcb-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: lcb-spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes lcb-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.lcb-error {
+  text-align: center;
+  padding: 20px;
+  color: #ef4444;
+}
+
+.lcb-btn-retry {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.lcb-btn-retry:hover {
+  background: #fecaca;
+}
+
+/* Brief Content */
+.lcb-brief {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lcb-quality-bar {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.lcb-quality-fill {
+  height: 100%;
+  background: #10b981;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.lcb-quality-score {
+  font-size: 11px;
+  color: #6b7280;
+  text-align: right;
+}
+
+/* Sections */
+.lcb-section {
+  background: #f9fafb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lcb-section-title {
+  padding: 10px 12px;
+  background: #f3f4f6;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+}
+
+.lcb-section-content {
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.lcb-item {
+  padding: 6px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lcb-item:last-child {
+  border-bottom: none;
+}
+
+.lcb-notes {
+  font-size: 12px;
+  color: #4b5563;
+  white-space: pre-wrap;
+}
+
+.lcb-link {
+  display: inline-block;
+  margin-right: 12px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.lcb-link:hover {
+  text-decoration: underline;
+}
+
+/* Scrollbar */
+.lcb-panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.lcb-panel-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.lcb-panel-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.lcb-panel-content::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
