@@ -94,9 +94,10 @@ npm run test
 
 Generates comprehensive property briefs by aggregating data from multiple sources:
 
-- **Property Scope** - Scraped from OTAs (Booking.com, TripAdvisor, Expedia)
-- **Local Competitors** - From Salesforce (same city, different brand)
+- **Property Scope** - Kevin H's Scoping Scraper SDK
+- **Local Competitors** - From Salesforce (same city
 - **Adjacency Customers** - Existing customers in same market
+- **Adjacency Customers** - Existing customers of the same brand, from Salesforce
 - **Parent Notes** - Selling notes from parent account
 - **Contact Links** - LinkedIn search URLs for decision makers
 - **Recent Articles** - News mentions from last 90 days
