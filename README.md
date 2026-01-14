@@ -94,10 +94,9 @@ npm run test
 
 Generates comprehensive property briefs by aggregating data from multiple sources:
 
-- **Property Scope** - Kevin H's Scoping Scraper SDK
-- **Local Competitors** - From Salesforce (same city
-- **Adjacency Customers** - Existing customers in same market
-- **Adjacency Customers** - Existing customers of the same brand, from Salesforce
+- **Property Scope** - @kaykas/hotel-scraping-sdk (venue scraping, room counts, meeting space data, pricing calculations)
+- **Local Competitors** - From Salesforce (same city, competing properties)
+- **Adjacency Customers** - Existing customers in same market or same brand, from Salesforce
 - **Parent Notes** - Selling notes from parent account
 - **Contact Links** - LinkedIn search URLs for decision makers
 - **Recent Articles** - News mentions from last 90 days
