@@ -2,6 +2,8 @@
 
 AI-Accelerated Sales Ramp System designed to reduce sales rep ramp time from ~11 weeks to 6-8 weeks.
 
+> **Note:** This feature is currently in development and being tested with Claude Code.
+
 ## Overview
 
 This system provides three core capabilities:
